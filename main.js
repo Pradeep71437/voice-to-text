@@ -50,9 +50,12 @@ function getCodeSnippet(text) {
     'and': '&&',
     'dot': '.',
     'or': '||',
-    'i': 'i',
-    'j': 'j',
-    'k': 'k',
+    'I': 'i',
+    'J': 'j',
+    'K': 'k',
+    'Int': 'int',
+ 
+
 
     // Add more commands and their corresponding code snippets here
   };

@@ -6,8 +6,6 @@ window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogn
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 
-let p = document.createElement('p');
-
 startButton.addEventListener('click', () => {
   recognition.start();
 });
@@ -17,57 +15,42 @@ stopButton.addEventListener('click', () => {
 });
 
 recognition.addEventListener('result', (e) => {
-  texts.appendChild(p);
-  const text = Array.from(e.results)
-    .map(result => result[0])
-    .map(result => result.transcript.toLowerCase())
-    .join('');
+  texts.innerHTML = ''; // Clear previous text
 
-  p.innerText = text;
-  if (e.results[0].isFinal) {
-    if (text.includes('stop voice coding')) {
-      recognition.stop();
-      return;
+  for (let i = 0; i < e.results.length; i++) {
+    const result = e.results[i][0].transcript.toLowerCase();
+    const codeSnippet = getCodeSnippet(result);
+    if (codeSnippet) {
+      const codeP = document.createElement('p');
+      codeP.classList.add('code');
+      codeP.innerText = codeSnippet;
+      texts.appendChild(codeP);
     }
-
-    const codeSnippets = {
-      'semicolon': ';',
-      'colon': ':',
-      'comma': ',',
-      'open bracket': '(',
-      'close bracket': ')',
-      'open curly brace': '{',
-      'close curly brace': '}',
-      'open square bracket': '[',
-      'close square bracket': ']',
-      'plus': '+',
-      'minus': '-',
-      'multiply': '*',
-      'divide': '/',
-      'equals to': '=',
-      'greater than': '>',
-      'less than': '<',
-      'and': '&&',
-      'or': '||',
-      // Add more commands and their corresponding code snippets here
-    };
-
-    for (const [command, snippet] of Object.entries(codeSnippets)) {
-      if (text.includes(command)) {
-        const codeP = document.createElement('p');
-        codeP.classList.add('code');
-        codeP.innerText = snippet;
-        texts.appendChild(codeP);
-        break;
-      }
-    }
-
-    p = document.createElement('p');
   }
 });
 
-recognition.addEventListener('end', () => {
-  recognition.start();
-});
+function getCodeSnippet(text) {
+  const codeSnippets = {
+    'semicolon': ';',
+    'colon': ':',
+    'comma': ',',
+    'open parenthesis': '(',
+    'close parenthesis': ')',
+    'open curly brace': '{',
+    'close curly brace': '}',
+    'open square bracket': '[',
+    'close square bracket': ']',
+    'plus': '+',
+    'minus': '-',
+    'multiply': '*',
+    'divide': '/',
+    'equals': '=',
+    'greater than': '>',
+    'less than': '<',
+    'and': '&&',
+    'or': '||',
+    // Add more commands and their corresponding code snippets here
+  };
 
-recognition.start();
+  return codeSnippets[text];
+}

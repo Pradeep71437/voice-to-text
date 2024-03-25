@@ -27,6 +27,13 @@ recognition.addEventListener('result', (e) => {
       texts.appendChild(codeP);
     }
   }
+
+  if (e.results[0].isFinal) {
+    const finalText = e.results[0][0].transcript.toLowerCase();
+    if (finalText.includes('stop voice recording')) {
+      recognition.stop();
+    }
+  }
 });
 
 function getCodeSnippet(text) {
@@ -54,9 +61,6 @@ function getCodeSnippet(text) {
     'J': 'j',
     'K': 'k',
     'Int': 'int',
- 
-
-
     // Add more commands and their corresponding code snippets here
   };
 
@@ -67,4 +71,3 @@ function getCodeSnippet(text) {
 
   return codeSnippets[text] || ''; // Return empty string if command not found
 }
-

@@ -5,6 +5,7 @@ const stopButton = document.getElementById('stopButton');
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
+recognition.continuous = true; // Set continuous recognition to true
 
 startButton.addEventListener('click', () => {
   recognition.start();

@@ -48,11 +48,20 @@ function getCodeSnippet(text) {
     'greater than': '>',
     'less than': '<',
     'and': '&&',
+    'dot': '.',
     'or': '||',
+    'i': 'i',
+    'j': 'j',
+    'k': 'k',
+
     // Add more commands and their corresponding code snippets here
   };
 
-  // return codeSnippets[text];
-  
-  return codeSnippets[text] || '';
+  if (text.startsWith('include ')) {
+    const library = text.substring('include '.length);
+    return `#include<${library}>`;
+  }
+
+  return codeSnippets[text] || ''; // Return empty string if command not found
 }
+

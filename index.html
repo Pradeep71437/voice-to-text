@@ -1,112 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Coding</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech Recognition</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>Voice Coding</h1>
-    <button id="startButton">Start Voice Coding..</button>
-    <p id="transcription"></p>
-
-    <script>
-        const startButton = document.getElementById('startButton');
-        const transcription = document.getElementById('transcription');
-
-        // Check if browser supports SpeechRecognition
-        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-
-            recognition.lang = 'en-US';
-
-            recognition.onresult = function(event) {
-                let interimTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        const transcript = event.results[i][0].transcript;
-                        transcription.textContent += transcript;
-                        processCommand(transcript.toLowerCase());
-                    } else {
-                        interimTranscript += event.results[i][0].transcript;
-                        transcription.textContent = interimTranscript;
-                    }
-                }
-            };
-
-            startButton.addEventListener('click', function() {
-                try {
-                    recognition.start();
-                    startButton.textContent = 'Listening...';
-                } catch (error) {
-                    console.error('Error starting recognition:', error);
-                    startButton.textContent = 'Error occurred, please try again';
-                }
-            });
-
-            recognition.onend = function() {
-                startButton.textContent = 'Start Voice Coding';
-            };
-        } else {
-            startButton.disabled = true;
-            transcription.textContent = 'Speech recognition not supported in this browser.';
-        }
-
-        function processCommand(command) {
-            const keywords = {
-                'semicolon': ';',
-                'open curly brace': '{',
-                'close curly brace': '}',
-                'open parenthesis': '(',
-                'close parenthesis': ')',
-                'open square bracket': '[',
-                'close square bracket': ']',
-                'double quotes': '"',
-                'single quotes': "'",
-                'equals': '=',
-                'plus': '+',
-                'minus': '-',
-                'multiply': '*',
-                'divide': '/',
-                'greater than': '>',
-                'less than': '<',
-                'greater than or equal to': '>=',
-                'less than or equal to': '<=',
-                'not equal to': '!=',
-                'equal to': '==',
-                'and': '&&',
-                'or': '||',
-                'not': '!',
-                'true': 'true',
-                'false': 'false',
-                'if': 'if',
-                'else': 'else',
-                'for loop': 'for',
-                'while loop': 'while',
-                'function': 'function',
-                'return': 'return',
-                'console log': 'console.log',
-                'comment': '// ',
-                'multiline comment': '/* */',
-                'new line': '\n'
-            };
-
-            if (command in keywords) {
-                insertText(keywords[command]);
-            }
-        }
-
-        function insertText(text) {
-            const textArea = document.createElement('textarea');
-            textArea.value = transcription.textContent + text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            transcription.textContent += text;
-        }
-    </script>
+  <section>
+    <h1>Speech<br> Recognition</h1>
+    <p>Available In Chrome😎 Only</p>
+    <div class="container">
+      <div class="texts">
+      </div>
+    </div>
+  </section>
+  <script src="./main.js"></script>
 </body>
 </html>

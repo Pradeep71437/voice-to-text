@@ -52,5 +52,7 @@ function getCodeSnippet(text) {
     // Add more commands and their corresponding code snippets here
   };
 
-  return codeSnippets[text];
+  // return codeSnippets[text];
+  
+  return codeSnippets[text] || '';
 }

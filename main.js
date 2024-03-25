@@ -1,48 +1,73 @@
 const texts = document.querySelector('.texts');
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 
 let p = document.createElement('p');
 
-recognition.addEventListener('result', (e)=>{
+startButton.addEventListener('click', () => {
+  recognition.start();
+});
+
+stopButton.addEventListener('click', () => {
+  recognition.stop();
+});
+
+recognition.addEventListener('result', (e) => {
   texts.appendChild(p);
   const text = Array.from(e.results)
     .map(result => result[0])
-    .map(result => result.transcript)
+    .map(result => result.transcript.toLowerCase())
     .join('');
 
   p.innerText = text;
-  if(e.results[0].isFinal){
-    if (text.includes('how are you')) {
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innerText = 'I am fine';
-      texts.appendChild(p)
+  if (e.results[0].isFinal) {
+    if (text.includes('stop voice coding')) {
+      recognition.stop();
+      return;
     }
-    if (text.includes("what's your name") || text.includes('what is your name')) {
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innerText = 'My Name is Cifar';
-      texts.appendChild(p)
+
+    const codeSnippets = {
+      'semicolon': ';',
+      'colon': ':',
+      'comma': ',',
+      'open parenthesis': '(',
+      'close parenthesis': ')',
+      'open curly brace': '{',
+      'close curly brace': '}',
+      'open square bracket': '[',
+      'close square bracket': ']',
+      'plus': '+',
+      'minus': '-',
+      'multiply': '*',
+      'divide': '/',
+      'equals': '=',
+      'greater than': '>',
+      'less than': '<',
+      'and': '&&',
+      'or': '||',
+      // Add more commands and their corresponding code snippets here
+    };
+
+    for (const [command, snippet] of Object.entries(codeSnippets)) {
+      if (text.includes(command)) {
+        const codeP = document.createElement('p');
+        codeP.classList.add('code');
+        codeP.innerText = snippet;
+        texts.appendChild(codeP);
+        break;
+      }
     }
-    if (text.includes('open my YouTube')) {
-      p = document.createElement('p');
-      p.classList.add('replay');
-      p.innerText = 'opening youtube channel';
-      texts.appendChild(p)
-      console.log('opening youtube')
-      window.open('https://www.youtube.com/channel/UCdxaLo9ALJgXgOUDURRPGiQ')
-    }
+
     p = document.createElement('p');
   }
 });
 
-
-recognition.addEventListener('end', ()=>{
+recognition.addEventListener('end', () => {
   recognition.start();
-})
+});
 
 recognition.start();
